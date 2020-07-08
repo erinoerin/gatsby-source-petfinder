@@ -1,5 +1,4 @@
-# gatsby-source-tribe-events
-
+# gatsby-source-petfinder
 Gatsby source plugin to add Petfinder nodes created from Petfinder endpoints:
 
 - Animals (/animals)
