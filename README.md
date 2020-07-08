@@ -20,8 +20,6 @@ axios
 
 ## Installation
 
-`npm install --save gatsby-source-petfinder`
-
 ## Examples of usage
 
 In your `gatsby-config.js`:
