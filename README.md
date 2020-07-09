@@ -94,4 +94,4 @@ allPetfinderAnimals {
 
 ## In memory of Lizzie :dog:
 
-February 6, 2006 - June 26, 2020. She was my little fluffy sidekick and a good dog.
+February 6, 2006 - June 26, 2020. She was my sidekick. She was a good dog.
