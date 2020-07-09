@@ -7,14 +7,16 @@ exports.sourceNodes = async (
   const { apiKey, apiSecret, orgID } = options;
 
   const authKey = await getAuthKey(apiKey, apiSecret);
+
   const resultAnimals = await pfGetResults("animals", orgID, authKey);
-  pfCreateNode(resultAnimals.data.categories, "PetfinderAnimals");
+
+  pfCreateNode(resultAnimals.animals, "PetfinderAnimals");
 
   async function getAuthKey(apiKey, apiSecret) {
     result = await axios({
-      method: "GET",
-      url: "https://api.petfinder.com/v2/oauth2/token",
-      params: {
+      method: "post",
+      url: "https://api.petfinder.com/v2/oauth2/token/",
+      data: {
         grant_type: "client_credentials",
         client_id: apiKey,
         client_secret: apiSecret,
@@ -22,27 +24,24 @@ exports.sourceNodes = async (
     }).catch((error) => {
       console.error(error.message);
     });
-
-    return result;
+    return result.data.access_token;
   }
 
-  async function pfGetResults(endPoint, authKey) {
+  async function pfGetResults(endPoint, orgID, authKey) {
     result = await axios({
       method: "GET",
-      url: "https://api.petfinder.com/v2/" + endPoint,
-      headers: { Authorization: "Bearer " + authKey },
+      url: `https://api.petfinder.com/v2/${endPoint}`,
+      headers: { Authorization: `Bearer ${authKey}` },
       params: {
-        organization: "OR33",
+        organization: orgID,
       },
     }).catch((error) => {
       console.error(error.message);
     });
-
-    return result;
+    return result.data;
   }
 
   function pfCreateNode(result, pfType) {
-    /* result should equal result.data.tags */
     result.forEach((r) => {
       const node = {
         ...r,
