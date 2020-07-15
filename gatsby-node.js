@@ -9,8 +9,7 @@ exports.sourceNodes = async (
   const authKey = await getAuthKey(apiKey, apiSecret);
 
   const resultAnimals = await pfGetResults("animals", orgID, authKey);
-
-  pfCreateNode(resultAnimals.animals, "PetfinderAnimals");
+  pfCreateNode(resultAnimals, "PetfinderAnimals");
 
   async function getAuthKey(apiKey, apiSecret) {
     result = await axios({
@@ -28,17 +27,29 @@ exports.sourceNodes = async (
   }
 
   async function pfGetResults(endPoint, orgID, authKey) {
-    result = await axios({
-      method: "GET",
-      url: `https://api.petfinder.com/v2/${endPoint}`,
-      headers: { Authorization: `Bearer ${authKey}` },
-      params: {
-        organization: orgID,
-      },
-    }).catch((error) => {
-      console.error(error.message);
-    });
-    return result.data;
+    let varPage = 0;
+    let varAnimals = [];
+
+    do {
+      varPage++;
+      result = await axios({
+        method: "GET",
+        url: `https://api.petfinder.com/v2/${endPoint}`,
+        headers: { Authorization: `Bearer ${authKey}` },
+        params: {
+          organization: orgID,
+          page: varPage,
+          limit: 100,
+        },
+      }).catch((error) => {
+        console.error(error.message);
+      });
+      varAnimals = varAnimals.concat(result.data.animals);
+    } while (
+      result.data.pagination.current_page < result.data.pagination.total_pages
+    );
+    console.log(`Number of Array Elements: ${varAnimals.length}`);
+    return varAnimals;
   }
 
   function pfCreateNode(result, pfType) {
