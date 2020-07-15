@@ -1,7 +1,7 @@
 {
   "name": "gatsby-source-petfinder",
   "description": "Gatsby source plugin to add petfinder pet nodes.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": "Erin Olmon",
   "main": "gatsby-node.js",
   "license": "MIT",
